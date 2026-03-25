@@ -1,0 +1,2 @@
+# shinji
+Global Localization
