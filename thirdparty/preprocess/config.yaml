@@ -1,0 +1,21 @@
+# Global Map Point Cloud Preprocessing Configuration
+
+# Input point cloud file path
+globalmap_path: "/share/mapping_ws/src/localization/shinji/data/globalmap_origin.pcd"
+
+# Output directory for processed files
+output_directory: "/share/mapping_ws/src/localization/shinji/data/"
+
+# Voxel grid downsampling resolution (meters)
+voxel_resolution: 0.2
+
+# Statistical outlier removal
+enable_outlier_removal: true
+
+# Centroid subtraction
+centroid_subtraction: false
+
+# FPFH parameters
+fpfh_normal_estimation_radius: 1.0
+fpfh_search_radius: 2.0
+fpfh_num_threads: 14

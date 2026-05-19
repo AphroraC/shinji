@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="config_file" default="$(find shinji)/config/config.json"/>
+
+  <arg name="nodelet_manager" default="nodelet_manager" />
+
+  <node pkg="nodelet" type="nodelet" name="$(arg nodelet_manager)" args="manager" output="screen"/>
+  <node pkg="nodelet" type="nodelet" name="shinji" args="load shinji/ShinjiNodelet $(arg nodelet_manager)">
+    <param name="config_file" value="$(arg config_file)"/>
+  </node>
+</launch>

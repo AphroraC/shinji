@@ -6,12 +6,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/" ${CMAKE_MODULE_PATH})
 set(TEASERPP_DEPS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party" CACHE PATH "Directory for third-party dependencies")
 
-# Check build types
-if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-    message(STATUS "Setting build type to 'Release' as none was specified.")
-    set(CMAKE_BUILD_TYPE "Release" CACHE
-            STRING "Choose the type of build." FORCE)
-endif ()
+set(CMAKE_BUILD_TYPE "Release")
 
 # Options
 option(BUILD_TESTS "Build tests" OFF)

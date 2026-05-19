@@ -1,0 +1,71 @@
+{
+  "ros": {
+    "cloud_topic": "/cloud_registered",
+    "globalmap_frame": "map",
+    "lidar_odom_frame": "camera_init",
+    "lidar_base_frame": "body",
+    "publish_map2odom_tf": false,
+    "tf_listen_timeout": 0.1
+  },
+  "common": {
+    "circular_buffer_capacity": 10,
+    "transformation_needed": false,
+    "globalmap_directory": "/share/mapping_ws/src/localization/shinji/data/",
+    "globalmap_origin": "globalmap_origin.pcd",
+    "globalmap_filtered": "globalmap_filtered.pcd",
+    "globalmap_features": "globalmap_features.pcd",
+    "centered": false,
+    "centroid": [ // centered->origin
+      9.80933,
+      -1.0084,
+      7.03291
+    ]
+  },
+  "logging": {
+    "enable": true,
+    "path": "/share/mapping_ws/src/localization/shinji/logs/"
+  },
+  "gicp": {
+    "enable": true,
+    "source_frames": 6,
+    "voxel_resolution": 0.1,
+    "inlier_fraction_threshold": 0.8,
+    "num_threads": 12,
+    "num_neighbors": 15,
+    "variance": 0.25
+  },
+  "fpfh": {
+    "normal_estimation_radius": 1.0,
+    "search_radius": 2.0,
+    "num_threads": 10
+  },
+  "teaser": {
+    // correspondence estimation params
+    "enable": true,
+    "source_frames": 6,
+    "voxel_resolution": 0.8,
+    "max_correspondence_distance": 0.8,
+    "inlier_fraction_threshold": 0.5,
+    "cross_check": true,
+    "tuple_test": false,
+    "tuple_scale": 0.95,
+    // transformation estimation params
+    "noise_bound": 0.5,
+    "cbar2": 2.0,
+    "rotation_max_iterations": 100,
+    "rotation_gnc_factor": 1.2,
+    "rotation_cost_threshold": 0.005,
+    "cost_estimation_method": "Voxels" // "Voxels" or "Flann"
+  },
+  "cropbox": {
+    "enable": false,
+    "cloud_frame": "body",
+    "negative": false,
+    "min_x": -100.0,
+    "max_x": 100.0,
+    "min_y": -100.0,
+    "max_y": 100.0,
+    "min_z": -100.0,
+    "max_z": 100.0
+  }
+}
