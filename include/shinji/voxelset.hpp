@@ -1,6 +1,7 @@
 #pragma once
 
-#include <functional>
+#include <cstdint>
+
 #ifdef USE_UNORDERED_DENSE
 #include <ankerl/unordered_dense.h>
 #else
@@ -13,11 +14,7 @@ namespace shinji {
 class Vector3iHash {
 public:
   size_t operator()(const Eigen::Vector3i& x) const {
-    const size_t hash1 = std::hash<int>()(x[0]);
-    const size_t hash2 = std::hash<int>()(x[1]);
-    const size_t hash3 = std::hash<int>()(x[2]);
-
-    return hash1 ^ (hash2 << 1) ^ (hash3 << 2);
+    return (static_cast<size_t>(static_cast<uint16_t>(x[0])) << 32) | (static_cast<size_t>(static_cast<uint16_t>(x[1])) << 16) | static_cast<size_t>(static_cast<uint16_t>(x[2]));
   }
 };
 
