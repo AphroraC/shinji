@@ -1,13 +1,11 @@
 // SPDX-FileCopyrightText: Copyright 2024 Kenji Koide
 // SPDX-License-Identifier: MIT
 #pragma once
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
-
 #include <memory>
 #include <random>
 #include <iostream>
 #include <unordered_map>
+#include <small_gicp/pointer.hpp>
 #include <small_gicp/points/traits.hpp>
 #include <small_gicp/util/fast_floor.hpp>
 #include <small_gicp/util/vector3i_hash.hpp>
@@ -22,9 +20,9 @@ namespace small_gicp {
 /// @param leaf_size  Downsampling resolution
 /// @return           Downsampled points
 template <typename InputPointCloud, typename OutputPointCloud = InputPointCloud>
-boost::shared_ptr<OutputPointCloud> voxelgrid_sampling(const InputPointCloud& points, double leaf_size) {
+shared_ptr<OutputPointCloud> voxelgrid_sampling(const InputPointCloud& points, double leaf_size) {
   if (traits::size(points) == 0) {
-    return boost::make_shared<OutputPointCloud>();
+    return make_shared<OutputPointCloud>();
   }
 
   const double inv_leaf_size = 1.0 / leaf_size;
@@ -55,7 +53,7 @@ boost::shared_ptr<OutputPointCloud> voxelgrid_sampling(const InputPointCloud& po
   const auto compare = [](const auto& lhs, const auto& rhs) { return lhs.first < rhs.first; };
   std::sort(coord_pt.begin(), coord_pt.end(), compare);
 
-  auto downsampled = boost::make_shared<OutputPointCloud>();
+  auto downsampled = make_shared<OutputPointCloud>();
   traits::resize(*downsampled, traits::size(points));
 
   size_t num_points = 0;
@@ -84,10 +82,10 @@ boost::shared_ptr<OutputPointCloud> voxelgrid_sampling(const InputPointCloud& po
 /// @param num_samples Number of samples to be drawn
 /// @return            Downsampled points
 template <typename InputPointCloud, typename OutputPointCloud = InputPointCloud, typename RNG = std::mt19937>
-boost::shared_ptr<OutputPointCloud> random_sampling(const InputPointCloud& points, size_t num_samples, RNG& rng) {
+shared_ptr<OutputPointCloud> random_sampling(const InputPointCloud& points, size_t num_samples, RNG& rng) {
   if (traits::size(points) == 0) {
     std::cerr << "warning: empty input points!!" << std::endl;
-    return boost::make_shared<OutputPointCloud>();
+    return make_shared<OutputPointCloud>();
   }
 
   std::vector<size_t> indices(traits::size(points));
@@ -101,7 +99,7 @@ boost::shared_ptr<OutputPointCloud> random_sampling(const InputPointCloud& point
   std::vector<size_t> samples(num_samples);
   std::sample(indices.begin(), indices.end(), samples.begin(), num_samples, rng);
 
-  auto downsampled = boost::make_shared<OutputPointCloud>();
+  auto downsampled = make_shared<OutputPointCloud>();
   traits::resize(*downsampled, num_samples);
 
   for (size_t i = 0; i < num_samples; i++) {

@@ -1,9 +1,7 @@
 // SPDX-FileCopyrightText: Copyright 2024 Kenji Koide
 // SPDX-License-Identifier: MIT
 #pragma once
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
-
+#include <small_gicp/pointer.hpp>
 #include <small_gicp/ann/kdtree.hpp>
 #include <small_gicp/ann/gaussian_voxelmap.hpp>
 #include <small_gicp/points/point_cloud.hpp>
@@ -18,7 +16,7 @@ namespace small_gicp {
 /// @param downsampling_resolution Downsample resolution
 /// @param num_neighbors         Number of neighbors for normal/covariance estimation
 /// @param num_threads           Number of threads
-std::pair<PointCloud::Ptr, boost::shared_ptr<KdTree<PointCloud>>>
+std::pair<PointCloud::Ptr, shared_ptr<KdTree<PointCloud>>>
 preprocess_points(const PointCloud& points, double downsampling_resolution, int num_neighbors = 10, int num_threads = 4);
 
 /// @brief Preprocess point cloud (downsampling, kdtree creation, and normal and covariance estimation)
@@ -26,7 +24,7 @@ preprocess_points(const PointCloud& points, double downsampling_resolution, int 
 /// @note  When num_threads >= 2, this function has minor run-by-run non-determinism due to the parallel downsampling.
 /// @see   small_gicp::voxelgrid_sampling_omp, small_gicp::estimate_normals_covariances_omp
 template <typename T, int D>
-std::pair<PointCloud::Ptr, boost::shared_ptr<KdTree<PointCloud>>>
+std::pair<PointCloud::Ptr, shared_ptr<KdTree<PointCloud>>>
 preprocess_points(const std::vector<Eigen::Matrix<T, D, 1>>& points, double downsampling_resolution, int num_neighbors = 10, int num_threads = 4);
 
 /// @brief Create an incremental Gaussian voxel map.

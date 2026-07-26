@@ -4,13 +4,10 @@ project(shinji VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
-if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-  set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build." FORCE)
-  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
-endif()
+set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build type" FORCE)
 
 option(USE_UNORDERED_DENSE "Use ankerl::unordered_dense container" ON)
+option(SMALL_GICP_STD_PTR "Use std::shared_ptr in small_gicp" OFF)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -46,6 +43,11 @@ catkin_package(
 if(USE_UNORDERED_DENSE)
   add_definitions(-DUSE_UNORDERED_DENSE)
   message(STATUS "Using ankerl::unordered_dense container")
+endif()
+
+if(SMALL_GICP_STD_PTR)
+  add_definitions(-DSMALL_GICP_STD_PTR)
+  message(STATUS "Using std::shared_ptr in small_gicp")
 endif()
 
 set(TEASER_CACHE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/teaserpp")

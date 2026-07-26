@@ -1,12 +1,10 @@
 // SPDX-FileCopyrightText: Copyright 2024 Kenji Koide
 // SPDX-License-Identifier: MIT
 #pragma once
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
-
 #include <memory>
 #include <vector>
 #include <Eigen/Core>
+#include <small_gicp/pointer.hpp>
 #include <small_gicp/points/traits.hpp>
 
 namespace small_gicp {
@@ -16,8 +14,8 @@ namespace small_gicp {
  */
 struct PointCloud {
 public:
-  using Ptr = boost::shared_ptr<PointCloud>;
-  using ConstPtr = boost::shared_ptr<const PointCloud>;
+  using Ptr = shared_ptr<PointCloud>;
+  using ConstPtr = shared_ptr<const PointCloud>;
 
   /// @brief Constructor
   PointCloud() {}

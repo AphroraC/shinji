@@ -1,13 +1,11 @@
 // SPDX-FileCopyrightText: Copyright 2024 Kenji Koide
 // SPDX-License-Identifier: MIT
 #pragma once
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
-
 #include <memory>
 #include <vector>
 #include <Eigen/Core>
 #include <Eigen/Geometry>
+#include <small_gicp/pointer.hpp>
 #include <small_gicp/points/point_cloud.hpp>
 #include <small_gicp/util/downsampling.hpp>
 #include <small_gicp/benchmark/benchmark.hpp>
@@ -30,7 +28,7 @@ public:
 
 class OdometryEstimation {
 public:
-  using Ptr = boost::shared_ptr<OdometryEstimation>;
+  using Ptr = shared_ptr<OdometryEstimation>;
 
   OdometryEstimation(const OdometryEstimationParams& params) : params(params) {}
   virtual ~OdometryEstimation() = default;

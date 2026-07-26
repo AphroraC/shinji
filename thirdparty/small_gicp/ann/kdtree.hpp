@@ -38,13 +38,11 @@
  *************************************************************************/
 #pragma once
 
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
-
 #include <memory>
 #include <numeric>
 #include <Eigen/Core>
 
+#include <small_gicp/pointer.hpp>
 #include <small_gicp/points/traits.hpp>
 #include <small_gicp/ann/traits.hpp>
 #include <small_gicp/ann/projection.hpp>
@@ -247,11 +245,11 @@ public:
 template <typename PointCloud, typename Projection = AxisAlignedProjection>
 struct KdTree {
 public:
-  using Ptr = boost::shared_ptr<KdTree<PointCloud, Projection>>;
-  using ConstPtr = boost::shared_ptr<const KdTree<PointCloud, Projection>>;
+  using Ptr = shared_ptr<KdTree<PointCloud, Projection>>;
+  using ConstPtr = shared_ptr<const KdTree<PointCloud, Projection>>;
 
   template <typename Builder = KdTreeBuilder>
-  explicit KdTree(boost::shared_ptr<const PointCloud> points, const Builder& builder = Builder()) : points(points),
+  explicit KdTree(shared_ptr<const PointCloud> points, const Builder& builder = Builder()) : points(points),
                                                                                                   kdtree(*points, builder) {}
 
   /// @brief  Find k-nearest neighbors. This method uses dynamic memory allocation.
@@ -277,7 +275,7 @@ public:
   }
 
 public:
-  const boost::shared_ptr<const PointCloud> points;     ///< Points
+  const shared_ptr<const PointCloud> points;     ///< Points
   const UnsafeKdTree<PointCloud, Projection> kdtree;  ///< KdTree
 };
 

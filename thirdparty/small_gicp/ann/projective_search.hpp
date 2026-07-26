@@ -1,11 +1,9 @@
 // SPDX-FileCopyrightText: Copyright 2024 Kenji Koide
 // SPDX-License-Identifier: MIT
 #pragma once
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
-
 #include <cmath>
 #include <Eigen/Core>
+#include <small_gicp/pointer.hpp>
 #include <small_gicp/points/traits.hpp>
 #include <small_gicp/ann/knn_result.hpp>
 
@@ -153,10 +151,10 @@ public:
 template <typename PointCloud, typename Projection = EquirectangularProjection, typename BorderModeH = BorderRepeat, typename BorderModeV = BorderClamp>
 struct ProjectiveSearch {
 public:
-  using Ptr = boost::shared_ptr<ProjectiveSearch<PointCloud, Projection>>;
-  using ConstPtr = boost::shared_ptr<const ProjectiveSearch<PointCloud, Projection>>;
+  using Ptr = shared_ptr<ProjectiveSearch<PointCloud, Projection>>;
+  using ConstPtr = shared_ptr<const ProjectiveSearch<PointCloud, Projection>>;
 
-  explicit ProjectiveSearch(int width, int height, boost::shared_ptr<const PointCloud> points) : points(points), search(width, height, *points) {}
+  explicit ProjectiveSearch(int width, int height, shared_ptr<const PointCloud> points) : points(points), search(width, height, *points) {}
 
   /// @brief  Find k-nearest neighbors. This method uses dynamic memory allocation.
   /// @param  query       Query point
@@ -181,7 +179,7 @@ public:
   }
 
 public:
-  const boost::shared_ptr<const PointCloud> points;                                       ///< Points
+  const shared_ptr<const PointCloud> points;                                       ///< Points
   const UnsafeProjectiveSearch<PointCloud, Projection, BorderModeH, BorderModeV> search;  ///< Search
 };
 

@@ -2,11 +2,11 @@
 // SPDX-License-Identifier: MIT
 #pragma once
 #include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
 
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 
+#include <small_gicp/pointer.hpp>
 #include <small_gicp/points/traits.hpp>
 
 namespace small_gicp {
