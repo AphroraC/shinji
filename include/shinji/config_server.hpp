@@ -76,6 +76,14 @@ struct CropboxConfig {
   Eigen::Vector4f max;
 };
 
+struct InitialGuessConfig {
+  bool enable;
+  double voxel_resolution;
+  double inlier_fraction_threshold;
+  Eigen::Vector4f translation;
+  Eigen::Vector4f rotation;
+};
+
 class ConfigServer {
 public:
   ConfigServer() = default;
@@ -90,7 +98,7 @@ public:
   GicpConfig gicp;
   TeaserConfig teaser;
   CropboxConfig cropbox;
-
+  InitialGuessConfig initial_guess;
 private:
   void validation();
 };

@@ -55,7 +55,7 @@
     "rotation_max_iterations": 100,
     "rotation_gnc_factor": 1.2,
     "rotation_cost_threshold": 0.005,
-    "cost_estimation_method": "Voxels" // "Voxels" or "Flann"
+    "cost_estimation_method": "Flann" // "Voxels" or "Flann"
   },
   "cropbox": {
     "enable": false,
@@ -67,5 +67,21 @@
     "max_y": 100.0,
     "min_z": -100.0,
     "max_z": 100.0
+  },
+  "initial_guess": {
+    "enable": true,
+    "voxel_resolution": 0.8,
+    "inlier_fraction_threshold": 0.8,
+    "translation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
   }
 }

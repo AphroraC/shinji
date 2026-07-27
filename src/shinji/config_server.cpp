@@ -57,6 +57,13 @@ void ConfigServer::load(const std::string& config_file) {
     cropbox.min = Eigen::Vector4f(data["cropbox"]["min_x"], data["cropbox"]["min_y"], data["cropbox"]["min_z"], 1.0);
     cropbox.max = Eigen::Vector4f(data["cropbox"]["max_x"], data["cropbox"]["max_y"], data["cropbox"]["max_z"], 1.0);
 
+    initial_guess.enable = data["initial_guess"]["enable"];
+    initial_guess.voxel_resolution = data["initial_guess"]["voxel_resolution"];
+    initial_guess.inlier_fraction_threshold = data["initial_guess"]["inlier_fraction_threshold"];
+    initial_guess.translation = Eigen::Vector4f(data["initial_guess"]["translation"][0], data["initial_guess"]["translation"][1], data["initial_guess"]["translation"][2], 1.0);
+    initial_guess.rotation =
+      Eigen::Vector4f(data["initial_guess"]["rotation"][0], data["initial_guess"]["rotation"][1], data["initial_guess"]["rotation"][2], data["initial_guess"]["rotation"][3]);
+
     validation();
   } catch (...) {
     throw std::runtime_error("Error parsing configuration file.");

@@ -1,9 +1,5 @@
 #pragma once
-#include <boost/filesystem.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/circular_buffer.hpp>
-
-#include <spdlog/spdlog.h>
 
 #include <teaser/matcher.h>
 #include <teaser/registration.h>
@@ -27,6 +23,7 @@ public:
 
 private:
   void setup_globalmap();
+  ResultT<AlignResult> guess_verify(const pcl::PointCloud<PointT>::ConstPtr& cloud);
   ResultT<AlignResult> coarse_align(const pcl::PointCloud<PointT>::ConstPtr& cloud);
   ResultT<AlignResult> fine_align(const pcl::PointCloud<PointT>::ConstPtr& cloud, const Eigen::Isometry3d& initial_guess);
   ResultT<AlignResult> query();

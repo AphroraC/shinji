@@ -96,12 +96,12 @@ void savePCDBinary(const pcl::PointCloud<PointT>::Ptr& cloud, const std::string&
   const std::string& filepath = save_path;
 
   // Check if directory exists, create if not
-  boost::filesystem::path dir_path(filepath);
-  if (!boost::filesystem::exists(dir_path)) {
+  std::filesystem::path dir_path(filepath);
+  if (!std::filesystem::exists(dir_path)) {
     try {
-      boost::filesystem::create_directories(dir_path);
+      std::filesystem::create_directories(dir_path);
       std::cout << "Created directory: " << filepath << std::endl;
-    } catch (const boost::filesystem::filesystem_error& e) {
+    } catch (const std::filesystem::filesystem_error& e) {
       std::cerr << "Failed to create directory " << filepath << ": " << e.what() << std::endl;
       return;
     }

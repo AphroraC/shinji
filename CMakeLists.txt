@@ -21,7 +21,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 find_package(Eigen3 REQUIRED)
-find_package(Boost REQUIRED COMPONENTS system filesystem container)
+find_package(Boost REQUIRED COMPONENTS container)
 find_package(PCL REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(OpenMP)

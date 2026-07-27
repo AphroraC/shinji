@@ -105,6 +105,11 @@ int main(int argc, char** argv) {
           throw std::runtime_error("Couldn't read file: " + globalmap_path);
         }
 
+        std::vector<int> indices;
+        pcl::removeNaNFromPointCloud(*globalmap_origin, *globalmap_origin, indices);
+        globalmap_origin->points.shrink_to_fit();
+        globalmap_origin->is_dense = true;
+
         // Check if point cloud is valid
         if (globalmap_origin->empty()) {
           throw std::runtime_error("Loaded point cloud is empty");

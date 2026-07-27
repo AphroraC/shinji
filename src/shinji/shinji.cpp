@@ -125,6 +125,13 @@ ResultT<AlignResult> Shinji::query() {
           logger->warn("One of the pointclouds in source_frames is empty!");
         }
       }
+
+      if (config->common.centered) {
+        std::vector<int> indices;
+        pcl::removeNaNFromPointCloud(*cloud4coarse_align, *cloud4coarse_align, indices);
+        cloud4coarse_align->points.shrink_to_fit();
+        cloud4coarse_align->is_dense = true;
+      }
     }
 
     if (config->gicp.enable) {
@@ -149,6 +156,13 @@ ResultT<AlignResult> Shinji::query() {
           logger->warn("One of the pointclouds in source_frames is empty!");
         }
       }
+
+      if (config->common.centered) {
+        std::vector<int> indices;
+        pcl::removeNaNFromPointCloud(*cloud4fine_align, *cloud4fine_align, indices);
+        cloud4fine_align->points.shrink_to_fit();
+        cloud4fine_align->is_dense = true;
+      }
     }
 
     source_frames.clear();
@@ -159,9 +173,36 @@ ResultT<AlignResult> Shinji::query() {
 
   auto cache_result = AlignResult();
   auto initial_guess = Eigen::Isometry3d::Identity();
+  bool skip_coarse_align = false;
 
   const auto t0 = ClockT::now();
-  if (config->teaser.enable) {
+  if (config->initial_guess.enable) {
+    auto guess_result = guess_verify(cloud4coarse_align);
+    if (guess_result) {
+      cache_result = guess_result.data;
+      initial_guess = guess_result.data.pose;
+
+      {
+        const auto& result = guess_result.data;
+        const auto& pose = result.pose;
+        Eigen::Quaterniond quat(pose.rotation());
+        logger->info("--- Guess Verification Result ---");
+        logger->info("Trans : {:.3f} {:.3f} {:.3f}", pose.translation().x(), pose.translation().y(), pose.translation().z());
+        logger->info("Quat  : {:.3f} {:.3f} {:.3f} {:.3f}", quat.x(), quat.y(), quat.z(), quat.w());
+        logger->info("Error : {:.3f}", result.error);
+        logger->info("Inlier: {:.3f}", result.inlier_fraction);
+      }
+
+      skip_coarse_align = true;
+
+    } else {
+      logger->warn("Invalid initial guess!");
+      logger->warn("Message: {}", guess_result.message);
+      logger->warn("Continue with teaser++ ...");
+    }
+  }
+
+  if (config->teaser.enable && !skip_coarse_align) {
     auto coarse_result = coarse_align(cloud4coarse_align);
     if (coarse_result) {
       cache_result = coarse_result.data;
@@ -218,6 +259,33 @@ ResultT<AlignResult> Shinji::query() {
   }
 
   return ResultT<AlignResult>::success(std::move(cache_result));
+}
+
+ResultT<AlignResult> Shinji::guess_verify(const pcl::PointCloud<PointT>::ConstPtr& cloud) {
+  if (!cloud || cloud->empty()) {
+    return ResultT<AlignResult>::failure(ErrorCode::INVALID_POINTCLOUD, "empty cloud4guess_verify");
+  }
+
+  pcl::PointCloud<PointT>::Ptr filtered = voxelgrid_sampling(cloud, config->initial_guess.voxel_resolution);
+
+  const auto& r = config->initial_guess.rotation;
+  const auto& t = config->initial_guess.translation;
+  auto initial_guess = Eigen::Isometry3d::Identity();
+  initial_guess.linear() = Eigen::Quaterniond(r.w(), r.x(), r.y(), r.z()).toRotationMatrix();
+  initial_guess.translation() = Eigen::Vector3d(t.x(), t.y(), t.z());
+
+  Eigen::Matrix4f transformation = initial_guess.matrix().cast<float>();
+
+  double error{};
+  double inlier_fraction{};
+  evaluater->estimate_matching_cost(filtered, transformation, error, inlier_fraction);
+
+  if (inlier_fraction > config->initial_guess.inlier_fraction_threshold) {
+    auto verify_result = AlignResult(error, inlier_fraction, initial_guess);
+    return ResultT<AlignResult>::success(std::move(verify_result));
+  } else {
+    return ResultT<AlignResult>::failure(ErrorCode::INVALID_INLIER_FRACTION, "inliers->" + std::to_string(inlier_fraction));
+  }
 }
 
 ResultT<AlignResult> Shinji::coarse_align(const pcl::PointCloud<PointT>::ConstPtr& cloud) {
