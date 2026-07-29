@@ -5,7 +5,9 @@ void Shinji::initialize(const std::string& config_file) {
   config = std::make_shared<shinji::ConfigServer>();
   config->load(config_file);
 
-  logger = create_module_logger("shinji", config->logging.path);
+  configure_logging(config->logging);
+
+  logger = create_module_logger("shinji", config->logging);
 
   globalmap = std::make_shared<shinji::GlobalmapServer>(config->common.globalmap_directory);
   globalmap->load(config->common.globalmap_origin, "origin");
@@ -306,7 +308,7 @@ ResultT<AlignResult> Shinji::coarse_align(const pcl::PointCloud<PointT>::ConstPt
   logger->info("cloud4coarse_align size: {}", filtered->size());
 
   if (config->logging.enable) {
-    savePCDBinary(filtered, "coarse", config->logging.path + "pointclouds/");
+    savePCDBinary(filtered, "coarse", config->logging.pcd_saving_path);
   }
 
   pcl::PointCloud<FeatureT>::Ptr features = extract_features(filtered, config->fpfh.normal_estimation_radius, config->fpfh.search_radius, config->fpfh.num_threads);
@@ -380,7 +382,7 @@ ResultT<AlignResult> Shinji::fine_align(const pcl::PointCloud<PointT>::ConstPtr&
 
   if (config->logging.enable) {
     pcl::PointCloud<PointT>::Ptr filtered = voxelgrid_sampling(cloud, config->gicp.voxel_resolution);
-    savePCDBinary(filtered, "fine", config->logging.path + "pointclouds/");
+    savePCDBinary(filtered, "fine", config->logging.pcd_saving_path);
   }
 
   const auto& source_origin = cloud;

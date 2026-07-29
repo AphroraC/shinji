@@ -23,7 +23,15 @@ void ConfigServer::load(const std::string& config_file) {
     common.centroid = Eigen::Vector4d(data["common"]["centroid"][0], data["common"]["centroid"][1], data["common"]["centroid"][2], 1.0);
 
     logging.enable = data["logging"]["enable"];
-    logging.path = data["logging"]["path"];
+    logging.pcd_saving_path = data["logging"]["pcd_saving_path"];
+    logging.console_output = data["logging"]["console_output"];
+    logging.console_level = data["logging"]["console_level"];
+    logging.file_output = data["logging"]["file_output"];
+    logging.logging_dir = data["logging"]["logging_dir"];
+    logging.logging_level = data["logging"]["logging_level"];
+    logging.rotate_logs = data["logging"]["rotate_logs"];
+    logging.max_file_size_kb = data["logging"]["max_file_size_kb"];
+    logging.max_files = data["logging"]["max_files"];
 
     fpfh.normal_estimation_radius = data["fpfh"]["normal_estimation_radius"];
     fpfh.search_radius = data["fpfh"]["search_radius"];

@@ -89,20 +89,18 @@ std::vector<Eigen::Vector4d> pointcloud2vector(const pcl::PointCloud<PointT>::Co
 void savePCDBinary(const pcl::PointCloud<PointT>::Ptr& cloud, const std::string& cloud_type, const std::string& save_path) {
   // Check if cloud is valid
   if (!cloud || cloud->empty()) {
-    std::cerr << "Error: Invalid or empty point cloud" << std::endl;
+    spdlog::error("Invalid or empty point cloud");
     return;
   }
 
   const std::string& filepath = save_path;
 
-  // Check if directory exists, create if not
-  std::filesystem::path dir_path(filepath);
-  if (!std::filesystem::exists(dir_path)) {
+  if (!std::filesystem::exists(filepath)) {
     try {
-      std::filesystem::create_directories(dir_path);
-      std::cout << "Created directory: " << filepath << std::endl;
+      std::filesystem::create_directories(filepath);
+      spdlog::info("Created directory: {}", filepath);
     } catch (const std::filesystem::filesystem_error& e) {
-      std::cerr << "Failed to create directory " << filepath << ": " << e.what() << std::endl;
+      spdlog::error("Failed to create directory {}: {}", filepath, e.what());
       return;
     }
   }
@@ -113,7 +111,6 @@ void savePCDBinary(const pcl::PointCloud<PointT>::Ptr& cloud, const std::string&
   std::stringstream ss;
   ss << std::put_time(std::localtime(&time_t), "%Y%m%d_%H%M%S");
 
-  // Sanitize cloud_type to prevent path injection
   std::string safe_cloud_type = cloud_type;
   safe_cloud_type.erase(std::remove_if(safe_cloud_type.begin(), safe_cloud_type.end(), [](char c) { return c == '/' || c == '\\' || c == '.'; }), safe_cloud_type.end());
 
@@ -128,13 +125,11 @@ void savePCDBinary(const pcl::PointCloud<PointT>::Ptr& cloud, const std::string&
   cloud->is_dense = true;
 
   try {
-    if (pcl::io::savePCDFileBinary(filename, *cloud) == 0) {
-      // std::cout << "Saved pointcloud to: " << filename << std::endl;
-    } else {
-      std::cerr << "Failed to save pointcloud to: " << filename << std::endl;
+    if (pcl::io::savePCDFileBinary(filename, *cloud) != 0) {
+      spdlog::error("Failed to save pointcloud to: {}", filename);
     }
   } catch (const std::exception& e) {
-    std::cerr << "Exception while saving pointcloud: " << e.what() << std::endl;
+    spdlog::error("Exception while saving pointcloud: {}", e.what());
   }
 }
 }  // namespace shinji

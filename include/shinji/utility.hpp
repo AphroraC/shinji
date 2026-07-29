@@ -3,6 +3,8 @@
 #include <filesystem>
 #include <string>
 
+#include <spdlog/spdlog.h>
+
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 

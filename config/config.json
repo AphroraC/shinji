@@ -10,7 +10,7 @@
   "common": {
     "circular_buffer_capacity": 10,
     "transformation_needed": false,
-    "globalmap_directory": "/share/mapping_ws/src/localization/shinji/data/",
+    "globalmap_directory": "/home/dynamicx/rm_ws/src/rm_sentry/localization/shinji/data/",
     "globalmap_origin": "globalmap_origin.pcd",
     "globalmap_filtered": "globalmap_filtered.pcd",
     "globalmap_features": "globalmap_features.pcd",
@@ -23,7 +23,15 @@
   },
   "logging": {
     "enable": true,
-    "path": "/share/mapping_ws/src/localization/shinji/logs/"
+    "pcd_saving_path": "/home/dynamicx/rm_ws/src/rm_sentry/localization/shinji/pointclouds",
+    "console_output": true,
+    "console_level": "info",
+    "file_output": true,
+    "logging_dir": "/home/dynamicx/rm_ws/src/rm_sentry/localization/shinji/logs",
+    "logging_level": "debug",
+    "rotate_logs": false,
+    "max_file_size_kb": 8192,
+    "max_files": 10
   },
   "gicp": {
     "enable": true,

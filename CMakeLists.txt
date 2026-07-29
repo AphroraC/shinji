@@ -61,6 +61,7 @@ set(TEASER_LIBRARIES
 add_library(shinji
   src/shinji/config_server.cpp
   src/shinji/globalmap_server.cpp
+  src/shinji/logging.cpp
   src/shinji/matching_cost_evaluater.cpp
   src/shinji/shinji.cpp
   src/shinji/utility.cpp

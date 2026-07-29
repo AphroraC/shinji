@@ -2,6 +2,7 @@ thirdparty/teaserpp/build/**
 thirdparty/preprocess/build/**
 data/**
 logs/**
+pointclouds/**
 
 # Prerequisites
 *.d
