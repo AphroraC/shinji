@@ -1,4 +1,4 @@
-{
+{ // Recommended parameters for single Livox Mid-360
   "ros": {
     "cloud_topic": "/cloud_registered",
     "globalmap_frame": "map",
@@ -10,7 +10,7 @@
   "common": {
     "circular_buffer_capacity": 10,
     "transformation_needed": false,
-    "globalmap_directory": "/home/dynamicx/rm_ws/src/rm_sentry/localization/shinji/data/",
+    "globalmap_directory": "/share/mapping_ws/src/localization/shinji/data/",
     "globalmap_origin": "globalmap_origin.pcd",
     "globalmap_filtered": "globalmap_filtered.pcd",
     "globalmap_features": "globalmap_features.pcd",
@@ -23,20 +23,20 @@
   },
   "logging": {
     "enable": true,
-    "pcd_saving_path": "/home/dynamicx/rm_ws/src/rm_sentry/localization/shinji/pointclouds",
-    "console_output": true,
+    "pcd_saving_path": "/share/mapping_ws/src/localization/shinji/pointclouds",
+    "console_output": false,
     "console_level": "info",
     "file_output": true,
-    "logging_dir": "/home/dynamicx/rm_ws/src/rm_sentry/localization/shinji/logs",
+    "logging_dir": "/share/mapping_ws/src/localization/shinji/logs",
     "logging_level": "debug",
-    "rotate_logs": false,
+    "rotate_logs": true,
     "max_file_size_kb": 8192,
     "max_files": 10
   },
   "gicp": {
     "enable": true,
-    "source_frames": 6,
-    "voxel_resolution": 0.1,
+    "source_frames": 8,
+    "voxel_resolution": 0.05,
     "inlier_fraction_threshold": 0.8,
     "num_threads": 12,
     "num_neighbors": 15,
@@ -45,7 +45,7 @@
   "fpfh": {
     "normal_estimation_radius": 1.0,
     "search_radius": 2.0,
-    "num_threads": 10
+    "num_threads": 12
   },
   "teaser": {
     // correspondence estimation params
@@ -79,7 +79,7 @@
   "initial_guess": {
     "enable": true,
     "voxel_resolution": 0.8,
-    "inlier_fraction_threshold": 0.8,
+    "inlier_fraction_threshold": 0.5,
     "translation": [
       0.0,
       0.0,
