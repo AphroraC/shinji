@@ -49,8 +49,6 @@ void Shinji::setup_globalmap() {
 
   evaluater->setup_target(filtered, config->teaser.max_correspondence_distance);
 
-  logger->info("TEASER Initialized.");
-
   const auto& target_origin = origin;
   // Downsample points and convert into pcl::PointCloud<pcl::PointCovariance>.
   target_covariance = small_gicp::voxelgrid_sampling_omp<pcl::PointCloud<PointT>, pcl::PointCloud<pcl::PointCovariance>>(*target_origin, config->gicp.voxel_resolution);
@@ -60,8 +58,6 @@ void Shinji::setup_globalmap() {
   target_tree.reset(new small_gicp::KdTree<pcl::PointCloud<CovarianceT>>(target_covariance, small_gicp::KdTreeBuilderOMP(config->gicp.num_threads)));
   gicp_align.reduction.num_threads = config->gicp.num_threads;
   gicp_align.rejector.max_dist_sq = 1.0;
-
-  logger->info("GICP Initialized.");
 }
 
 void Shinji::insert_frame(const Eigen::Isometry3d& pose, const pcl::PointCloud<PointT>::Ptr& cloud) {
@@ -198,7 +194,7 @@ ResultT<AlignResult> Shinji::query() {
       skip_coarse_align = true;
 
     } else {
-      logger->warn("Invalid initial guess!");
+      logger->warn("Guess Verification Failed!");
       logger->warn("Message: {}", guess_result.message);
       logger->warn("Continue with teaser++ ...");
     }
@@ -222,7 +218,7 @@ ResultT<AlignResult> Shinji::query() {
       }
 
     } else {
-      logger->warn("Coarse alignment failed!");
+      logger->warn("Coarse Alignment Failed!");
       logger->warn("Message: {}", coarse_result.message);
       return coarse_result;
     }
@@ -246,7 +242,7 @@ ResultT<AlignResult> Shinji::query() {
       }
 
     } else {
-      logger->warn("Fine alignment failed!");
+      logger->warn("Fine Alignment Failed!");
       logger->warn("Message: {}", fine_result.message);
       return fine_result;
     }
@@ -269,6 +265,7 @@ ResultT<AlignResult> Shinji::guess_verify(const pcl::PointCloud<PointT>::ConstPt
   }
 
   pcl::PointCloud<PointT>::Ptr filtered = voxelgrid_sampling(cloud, config->initial_guess.voxel_resolution);
+  logger->info("source4guess_verify size: {}", filtered->size());
 
   const auto& r = config->initial_guess.rotation;
   const auto& t = config->initial_guess.translation;
@@ -305,7 +302,7 @@ ResultT<AlignResult> Shinji::coarse_align(const pcl::PointCloud<PointT>::ConstPt
 
   const pcl::PointCloud<PointT>::ConstPtr& source_origin = config->common.centered ? centered : cloud;
   pcl::PointCloud<PointT>::Ptr filtered = voxelgrid_sampling(source_origin, config->teaser.voxel_resolution);
-  logger->info("cloud4coarse_align size: {}", filtered->size());
+  logger->info("source4coarse_align size: {}", filtered->size());
 
   if (config->logging.enable) {
     savePCDBinary(filtered, "coarse", config->logging.pcd_saving_path);
@@ -390,7 +387,7 @@ ResultT<AlignResult> Shinji::fine_align(const pcl::PointCloud<PointT>::ConstPtr&
   // Downsample points and convert into pcl::PointCloud<pcl::PointCovariance>.
   source_covariance = small_gicp::voxelgrid_sampling_omp<pcl::PointCloud<PointT>, pcl::PointCloud<CovarianceT>>(*source_origin, config->gicp.voxel_resolution);
   small_gicp::estimate_covariances_omp(*source_covariance, config->gicp.num_neighbors, config->gicp.num_threads);
-  logger->info("cloud4fine_align size: {}", source_covariance->size());
+  logger->info("source4fine_align size: {}", source_covariance->size());
 
   auto solution = gicp_align.align(*target_covariance, *source_covariance, *target_tree, initial_guess);
 

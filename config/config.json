@@ -29,6 +29,7 @@
     "file_output": true,
     "logging_dir": "/share/mapping_ws/src/localization/shinji/logs",
     "logging_level": "debug",
+    "flush_level": "info",
     "rotate_logs": true,
     "max_file_size_kb": 8192,
     "max_files": 10

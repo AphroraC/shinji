@@ -27,6 +27,7 @@ spdlog::level::level_enum log_level_from_string(const std::string& level) {
 
 void configure_logging(const LoggingConfig& cfg) {
   const auto level = log_level_from_string(cfg.logging_level);
+  const auto flush_level = log_level_from_string(cfg.flush_level);
   spdlog::set_level(level);
   if (spdlog::default_logger()) {
     spdlog::default_logger()->set_level(level);
@@ -59,7 +60,7 @@ void configure_logging(const LoggingConfig& cfg) {
         spdlog::default_logger()->set_level(file_sink->level());
       }
     }
-    spdlog::default_logger()->flush_on(spdlog::level::warn);
+    spdlog::default_logger()->flush_on(flush_level);
   }
 }
 
@@ -76,6 +77,7 @@ std::shared_ptr<spdlog::logger> create_module_logger(const std::string& module_n
 
   const auto logging_level = log_level_from_string(cfg.logging_level);
   const auto console_level = log_level_from_string(cfg.console_level);
+  const auto flush_level = log_level_from_string(cfg.flush_level);
 
   logger = std::make_shared<spdlog::logger>(module_name);
   spdlog::register_logger(logger);
@@ -107,7 +109,7 @@ std::shared_ptr<spdlog::logger> create_module_logger(const std::string& module_n
     min_level = console_level;
   }
   logger->set_level(min_level);
-  logger->flush_on(spdlog::level::warn);
+  logger->flush_on(flush_level);
 
   return logger;
 }

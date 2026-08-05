@@ -29,6 +29,7 @@ void ConfigServer::load(const std::string& config_file) {
     logging.file_output = data["logging"]["file_output"];
     logging.logging_dir = data["logging"]["logging_dir"];
     logging.logging_level = data["logging"]["logging_level"];
+    logging.flush_level = data["logging"]["flush_level"];
     logging.rotate_logs = data["logging"]["rotate_logs"];
     logging.max_file_size_kb = data["logging"]["max_file_size_kb"];
     logging.max_files = data["logging"]["max_files"];

@@ -38,7 +38,8 @@ struct LoggingConfig {
   std::string console_level{"info"};
   bool file_output{true};
   std::string logging_dir{""};
-  std::string logging_level{"debug"};
+  std::string logging_level{"info"};
+  std::string flush_level{"info"};
   bool rotate_logs{false};
   size_t max_file_size_kb{8192};
   size_t max_files{10};
